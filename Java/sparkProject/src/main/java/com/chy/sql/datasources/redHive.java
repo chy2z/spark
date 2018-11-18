@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by chy on 2018/11/18.
- */
+* @Title: redHive
+* @Description: 读取hive
+* @author chy
+* @date 2018/11/19 0:43
+*/
 public class redHive {
 
     public static void main(String[] args) {
