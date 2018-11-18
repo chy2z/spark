@@ -34,4 +34,18 @@ public class SparkUtil {
                 .getOrCreate();
     }
 
+    /**
+     * SparkSession
+     * 支持数据源：hive
+     * @return
+     */
+    public static SparkSession getSparkSessionForHive() {
+        return SparkSession
+                .builder()
+                .appName("SparkSQLForHive")
+                .master("local[*]")
+                .enableHiveSupport()
+                .getOrCreate();
+    }
+
 }

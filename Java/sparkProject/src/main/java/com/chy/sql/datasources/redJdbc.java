@@ -18,17 +18,7 @@ import java.util.Properties;
 public class redJdbc {
 
     public static void main(String[] arg){
-
-
-
-
-
-
-
-
-        test3();
-
-
+        test2();
     }
 
     public static void test3(){
@@ -60,26 +50,19 @@ public class redJdbc {
     }
 
     public static void test2(){
-
-        String url="jdbc:mysql://localhost:3306/sparksql?user=root&password=wmzycn";
+        String url="jdbc:mysql://localhost:3306/sparksql";
         String tempTableName=" (select id,name from users) as u";
         SparkSession spark= SparkUtil.getSparkSession();
-
-
         Properties connectionProperties = new Properties();
         connectionProperties.put("user", "root");
         connectionProperties.put("password", "wmzycn");
         connectionProperties.put("isolationLevel","REPEATABLE_READ");
-
-
         //方式2：读取users信息
         Dataset<Row> jdbcDF2 = spark.read()
                 .jdbc(url, tempTableName, connectionProperties);
-
         //保存到users3表
         jdbcDF2.write()
                 .jdbc(url, "users3", connectionProperties);
-
 
     }
 
