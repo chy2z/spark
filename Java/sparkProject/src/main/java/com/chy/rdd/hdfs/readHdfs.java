@@ -16,7 +16,26 @@ public class readHdfs {
         JavaSparkContext sc= SparkUtil.getJavaSparkContext();
 
         /**
-         * 项目路径
+         * hive 数据
+         */
+        JavaRDD<String> lines = sc.textFile("hdfs://localhost:9000/user/hive/warehouse/kvsrc/kv1.txt");
+
+        JavaRDD<String> tempRDD = lines.flatMap(line-> Arrays.asList(line.split("\u0001")).iterator());
+
+        JavaRDD<String> nameRDD = tempRDD.map(name -> {
+            return name;
+        });
+
+        nameRDD.foreach(name -> System.out.println(name));
+
+
+    }
+
+    public void test1(){
+        JavaSparkContext sc= SparkUtil.getJavaSparkContext();
+
+        /**
+         * 文件路径
          */
         JavaRDD<String> lines = sc.textFile("hdfs://localhost:9000/chy-data/hdfs2.txt");
 
@@ -27,9 +46,5 @@ public class readHdfs {
         });
 
         nameRDD.foreach(name -> System.out.println(name));
-
-
     }
-
-
 }
