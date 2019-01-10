@@ -2,7 +2,10 @@ package com.chy.util;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function0;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.streaming.Duration;
+import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
 /**
 * @Title: SparkUtil
@@ -22,6 +25,37 @@ public class SparkUtil {
     }
 
     /**
+     * 获取 JavaStreamingContext
+     * @return
+     */
+    public static JavaStreamingContext getJavaStreamingContext(int duration) {
+        SparkConf conf = new SparkConf().setAppName("JavaSpark").setMaster("local[*]");
+        return new JavaStreamingContext(conf, new Duration(duration));
+    }
+
+    /**
+     * 获取 JavaStreamingContext
+     * @return
+     */
+    public static JavaStreamingContext getJavaStreamingContext(int duration,boolean writeAheadLog){
+        SparkConf conf = new SparkConf().setAppName("JavaSpark").setMaster("local[*]");
+        if(writeAheadLog) {
+            conf.set("spark.streaming.receiver.writeAheadLog.enable", "true");
+        }
+        return new JavaStreamingContext(conf, new Duration(duration));
+    }
+
+    /**
+     * 从检查点路径恢复或者创建新的
+     * @param directory
+     * @param duration
+     * @return
+     */
+    public static JavaStreamingContext getOrCreateJavaStreamingContext(String directory,int duration,Function0<JavaStreamingContext> creatingFunc) {
+        return JavaStreamingContext.getOrCreate(directory, creatingFunc);
+    }
+
+    /**
      * SparkSession
      * 支持数据源：textFile,load,csv,json,text,format,jdbc
      * @return
@@ -35,7 +69,7 @@ public class SparkUtil {
     }
 
     /**
-     * SparkSession
+     * SparkSession for hive
      * 支持数据源：hive
      * @return
      */
