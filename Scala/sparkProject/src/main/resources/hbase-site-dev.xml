@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+<property>
+ 
+<!-- hbase提供的服务地址-->
+ 
+<name>hbase.master</name>
+ 
+<value>localhost:6000</value>
+ 
+</property>
+ 
+<property>
+ 
+<name>hbase.master.maxclockskew</name>
+ 
+<value>180000</value>
+ 
+</property>
+ 
+<property>
+ 
+<!-- hbase在hdfs里的目录 -->
+ 
+<name>hbase.rootdir</name>
+ 
+<value>hdfs://localhost:9000/hbase</value>
+ 
+</property>
+ 
+<property>
+ 
+<name>hbase.cluster.distributed</name>
+ 
+<value>false</value>
+ 
+</property>
+ 
+<property>
+ 
+<!-- ZK的主机地址 -->
+ 
+<name>hbase.zookeeper.quorum</name>
+ 
+<value>localhost</value>
+ 
+</property>
+ 
+<property>
+ 
+<!-- hbase在ZK上保存数据的目录 -->
+ 
+<name>hbase.zookeeper.property.dataDir</name>
+ 
+<value>/hbase</value>
+ 
+</property>
+ 
+<property>
+ 
+<name>dfs.replication</name>
+ 
+<value>1</value>
+ 
+</property>
+</configuration>

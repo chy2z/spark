@@ -4,3 +4,5 @@
 /logs
 /spark-master
 /Java/sparkProject/src/main/resources/checkpoint
+/Scala/sparkProject/.idea
+/Scala/sparkProject/target
