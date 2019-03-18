@@ -96,7 +96,6 @@ public class KafkaStreamDirect_Offset {
                            + offsetRange.partition() + "'");
                 }
             }
-
         });
 
 
