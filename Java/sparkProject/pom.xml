@@ -68,15 +68,6 @@
       <version>6.2.3</version>
     </dependency>
 
-    <!-- elasticsearch-hadoop
-    <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch-hadoop</artifactId>
-      <version>6.2.3</version>
-    </dependency>
-    -->
-
-
   </dependencies>
 
   <build>

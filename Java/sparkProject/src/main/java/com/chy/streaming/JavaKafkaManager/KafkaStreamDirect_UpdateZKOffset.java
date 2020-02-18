@@ -2,9 +2,7 @@ package com.chy.streaming.JavaKafkaManager;
 
 import com.chy.util.SparkUtil;
 import org.apache.spark.SparkException;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaInputDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
@@ -36,15 +34,18 @@ public class KafkaStreamDirect_UpdateZKOffset {
         kafkaParams.put("group.id", groupid);
         kafkaParams.put("auto.offset.reset", "smallest");
 
-
+        //滚动窗口
         JavaStreamingContext jssc= SparkUtil.getJavaStreamingContext(10000);
-
 
         JavaKafkaManager javaKafkaManager=new JavaKafkaManager(kafkaParams);
 
-
         JavaInputDStream<String> messages=javaKafkaManager.createDirectStream(jssc,kafkaParams,topicsSet);
 
+        messages.foreachRDD((rdd)->{
+            //OffsetRange[] offsets = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
+            //更新offset
+            javaKafkaManager.updateZKOffsets(rdd);
+        });
 
         //分词
         JavaDStream<String> words = messages.flatMap(new FlatMapFunction<String, String>() {
@@ -54,31 +55,11 @@ public class KafkaStreamDirect_UpdateZKOffset {
             }
         });
 
-        //更新zk
-        words.foreachRDD(new VoidFunction<JavaRDD<String>>(){
-            @Override
-            public void call(JavaRDD<String> rdd) throws Exception {
-                System.out.println(rdd);
-                if (!rdd.isEmpty()){
-                    rdd.foreach(new VoidFunction<String>() {
-                        @Override
-                        public void call(String r) throws Exception {
-                            System.out.println(r);
-                        }
-                    });
-                    javaKafkaManager.updateZKOffsets(rdd);
-                }
-            }
-        });
-
-
-        words.print(100);
-
+        //计数
         JavaPairDStream<String, Integer> wordCounts = words.mapToPair(s -> new Tuple2<>(s, 1))
                 .reduceByKey((i1, i2) -> i1 + i2);
 
         wordCounts.print(100);
-
 
         jssc.start();
 
